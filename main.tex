@@ -1,0 +1,204 @@
+\documentclass{article}
+
+\usepackage{etoolbox}
+\usepackage{xparse}
+
+\usepackage[table]{xcolor}
+
+\usepackage{ragged2e}
+
+% first we need to make pandoc output behave
+
+\usepackage{pgf}
+
+%\usepackage{longtable}
+% \let\endhead\relax
+
+%\usepackage{booktabs}
+% \let\toprule\hline
+% \let\bottomrule\hline
+% \let\midrule\hline
+
+% and now the serious stuff
+
+% breakable two-columns tables
+% \usepackage{xtab}
+% avoid overestimation so columns breaks are tighter
+%\xentrystretch{0}
+% underestimate so columns breaks are even tighter
+% \xentrystretch{-10}
+
+% essential for styling
+\usepackage{array}
+
+
+% % this macro calls the VariaTable styles
+% \NewDocumentCommand{\NextTableStyle}{m}{\csname VariaTableStyle#1\endcsname}
+
+% % this is the default VariaTable style
+% \NewDocumentCommand{\VariaTableStyleDefault}{}{
+%   \rowcolors{1}{TableStripeOdd}{TableStripeEven}
+%   \arrayrulecolor{TableBorder}
+%   \renewcommand*{\arraystretch}{1.5}
+% }
+% % and we make sure to set it as baseline
+% \NextTableStyle{Default}
+
+% % here is another style example
+% \NewDocumentCommand{\VariaTableStyleStatBlock}{}{
+%   \rowcolors{1}{white}{white}
+%   \arrayrulecolor{white}
+%   \renewcommand*{\arraystretch}{1}
+% }
+
+% \NewDocumentCommand{\VariaTableStyleBizarro}{}{
+%   \rowcolors{1}{blue}{red}
+%   \arrayrulecolor{magenta}
+%   \renewcommand*{\arraystretch}{1}
+% }
+
+% \NewDocumentCommand{\NextTableColumns}{m}{\newcolumntype{N}{#1}}
+
+% \NewDocumentCommand{\TheCaption}{}{}
+% \NewDocumentCommand{\NextTableCaption}{m}{}% redefined below w/ \BreakingTable as default
+% \NewDocumentCommand{\EmptyTableCaption}{}{\RenewDocumentCommand{\TheCaption}{}{}}
+
+% % caption style
+% \DeclareRobustCommand{\CaptionStyle}[1]{%
+%   \tikz\node[
+%       fill=SectioningColor,
+%       font=\sffamily\scshape\color{white}\bfseries,
+%       inner sep=4pt,
+%       text width=\linewidth-2*3pt,
+%     ] {#1};%
+% }
+
+% \newlength\BreakingTableBeforeskipAmount
+% \newlength\BreakingTableAfterskipAmount
+
+% \NewDocumentCommand{\NextTableSkips}{mm}{
+%   \BreakingTableBeforeskipAmount=#1
+%   \BreakingTableAfterskipAmount=#2
+% }
+
+% \NewDocumentCommand{\BreakingTable}{}{
+%   \RenewDocumentCommand{\NextTableCaption}{m}%
+%     {\RenewDocumentCommand{\TheCaption}{}{\tablecaption{\CaptionStyle{##1}}}}
+%   \renewenvironment{VariaTable}
+%     {\TheCaption\addvspace{\BreakingTableBeforeskipAmount}\begin{xtabular*}{\linewidth}{N}}
+%     {\end{xtabular*}\vspace\BreakingTableAfterskipAmount}
+% }
+
+% \NewDocumentCommand{\FloatingTable}{O{htb}}{
+%   \RenewDocumentCommand{\NextTableCaption}{m}%
+%     {\RenewDocumentCommand{\TheCaption}{}{\caption{##1}}}
+%   \renewenvironment{VariaTable}
+%     {\begin{table}[#1]\TheCaption\begin{xtabular*}{\linewidth}{N}}
+%     {\end{xtabular*}\end{table}}
+% }
+
+% \NewDocumentCommand{\SpanningTable}{O{tbp}}{
+%   \RenewDocumentCommand{\NextTableCaption}{m}%
+%     {\RenewDocumentCommand{\TheCaption}{}{\caption{##1}}}
+%   \renewenvironment{VariaTable}
+%     {\begin{table*}[#1]\TheCaption\begin{xtabular*}{\linewidth}{N}}
+%     {\end{xtabular*}\end{table*}}
+% }
+
+% \newenvironment{VariaTable}{}{}
+% \BreakingTable
+
+% % hook to reset table configuration after each use
+% \AfterEndEnvironment{VariaTable}{%
+% \BreakingTable%
+% \NextTableSkips{\medskipamount}{\medskipamount}% default (breaking) table skips
+% \EmptyTableCaption%
+% \NextTableStyle{Default}%
+% }
+
+% =================================================================== FIGURES ==
+
+
+
+
+
+
+% instead of erasing separators with @{} just compensate for them
+\newcolumntype{S}[2]{#1{\dimexpr#2\linewidth-2\tabcolsep\relax}}
+
+% cell alignment
+\newcolumntype{T}[1]{S{p}{#1}}
+% \newcolumntype{M}[1]{S{m}{#1}}
+\newcolumntype{B}[1]{S{b}{#1}}
+
+% \newcolumntype{D}[1]{>{\def\lb{\newline}}T{#1}}
+% \newcolumntype{K}[1]{C>{\def\lb{\newline\null\hfil}\hfil}T{#1}<{\hfil\null}}
+% \newcolumntype{W}[1]{>{\def\lb{\newline\null\hfill}\hfill}T{#1}}
+% \newcolumntype{O}[2]{C>{\def\lb{\newline\null\hfil}\hfil}#1{#2}<{\hfil\null}}
+
+\newcolumntype{J}{>{}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}}
+\newcolumntype{C}{>{\centering\arraybackslash}}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}}
+
+\newcolumntype{M}[1]{>{%
+  \ifnum`#1=`j
+    \let\lb\linebreak
+  \else
+    \ifnum`#1=`l\raggedright
+    \else\ifnum`#1=`c\centering
+    \else\ifnum`#1=`r\raggedleft
+    \else\ERROR\fi\fi\fi
+    \let\lb\\\arraybackslash
+  \fi}}
+
+% \def\LOREM{TL TC TR\lb CL CC CR\lb BL BC BR}
+\def\LOREM{
+  $\bullet$ $\bullet$ $\bullet$ \lb
+  $\bullet$ $\bullet$ $\bullet$ \lb
+  $\bullet$ $\bullet$ $\bullet$
+}
+
+\def\SAMPLETABLE#1{%
+  \begin{tabular}{#1}\hline
+    A & B      & C \\\hline
+    A & \LOREM & C \\\hline
+    A & B      & C \\\hline
+  \end{tabular}}
+
+\begin{document}\noindent
+\SAMPLETABLE{|c|M{j}p{.5in}|c|}
+\SAMPLETABLE{|c|M{l}p{.5in}|c|}
+\SAMPLETABLE{|c|M{c}p{.5in}|c|}
+\SAMPLETABLE{|c|M{r}p{.5in}|c|}
+\SAMPLETABLE{|c|M{j}m{.5in}|c|}
+\SAMPLETABLE{|c|M{l}m{.5in}|c|}
+\SAMPLETABLE{|c|M{c}m{.5in}|c|}
+\SAMPLETABLE{|c|M{r}m{.5in}|c|}
+\SAMPLETABLE{|c|M{j}b{.5in}|c|}
+\SAMPLETABLE{|c|M{l}b{.5in}|c|}
+\SAMPLETABLE{|c|M{c}b{.5in}|c|}
+\SAMPLETABLE{|c|M{r}b{.5in}|c|}
+
+% % transparency trick: ! gets the fill while > gets the content
+\newcolumntype{O}[1]{%
+  !{\pgfsetfillopacity{#1}}%
+  >{\leavevmode\pgfsetfillopacity{1}}%
+}
+
+\rowcolors{1}{red}{blue}
+\begin{tabular}{|c
+  % |
+  @{\hskip\tabcolsep\pgfsetfillopacity{.5}}
+  % >{\leavevmode\pgfsetfillopacity{1}}%
+  l
+  % <{\leavevmode\pgfsetfillopacity{1}}%
+  c|}\hline
+  A & B & C \\\hline
+  A & B & C \\\hline
+  A & B & C \\\hline
+\end{tabular}
+
+\showcols
+
+\end{document}
